@@ -1,4 +1,4 @@
-//known_bugs: snake_tp, snake_input, no deathchecks just yet
+//known_bugs: snake_tp, snake_input
 //stupidly overengineered
 
 #include<stdio.h>
@@ -48,6 +48,8 @@ int main(){
 
 	noecho();
 	int my, mx;
+	bool dead = 0;
+
 	while(active){
 		//figure out screen size
 		getmaxyx(stdscr, my, mx);
@@ -94,6 +96,9 @@ int main(){
 			}
 			snake = NewArray;
 		} else {exit(19);}
+		
+
+
 		//free(NewArray);
 		} 	
 		for (int i = SnakeLength - 2; i > 0; i--){
@@ -101,6 +106,11 @@ int main(){
 			snake[i][1] = snake[i - 1][1];
 	}
 		
+		for(int i = 3; i < SnakeLength; i++){
+			if(snake[i][0] == snake[0][0] && snake[i][1] == snake[0][1]){
+				exit(121);
+			}
+		}
 		FoodEaten = 0;
 		moveSnake(CurrentDirection, snake);
 		mvprintw(--my, --mx, "m");	
