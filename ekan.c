@@ -1,4 +1,4 @@
-//known_bugs: snake_tp, snake_input
+//known_bugs: snake_tp, snake_input, no deathchecks just yet
 //stupidly overengineered
 
 #include<stdio.h>
@@ -48,8 +48,6 @@ int main(){
 
 	noecho();
 	int my, mx;
-	bool dead = 0;
-
 	while(active){
 		//figure out screen size
 		getmaxyx(stdscr, my, mx);
@@ -61,10 +59,9 @@ int main(){
 			int sx = snake[i][1];
 			mvprintw(sy, sx, "X"); 
 		}
-		//check if player ded
+		//precheck if player ded
 		int sneky = snake[0][0];
 		int snekx = snake[0][1];
-		//TODO: COMPLETE DEATHCHECKS;
 		if (sneky == my || snekx == mx || snekx < 0 || sneky < 0){
 			active = 0;	exit(12);	/*return 0;*/}
 		if((sneky == food[0] && snekx == food[1]) || !food[0]){
@@ -73,46 +70,42 @@ int main(){
 			FoodEaten = 1;
 			SnakeLength++;
 		}	
-		
-		if(ch == KEY_UP && CurrentDirection != DOWN){
+
+		if((ch == KEY_UP || ch == 'k') && CurrentDirection != DOWN){
 			CurrentDirection = UP;	
-		} else if(ch == KEY_DOWN && CurrentDirection != UP){
+		} else if((ch == KEY_DOWN || ch == 'j') && CurrentDirection != UP){
 			CurrentDirection = DOWN;
-		} else if (ch == KEY_LEFT && CurrentDirection != RIGHT){
+		} else if ((ch == KEY_LEFT || ch == 'h') && CurrentDirection != RIGHT){
 			CurrentDirection = LEFT;
-		} else if (ch == KEY_RIGHT && CurrentDirection != LEFT){
+		} else if ((ch == KEY_RIGHT || ch == 'l') && CurrentDirection != LEFT){
 			CurrentDirection = RIGHT;
 		}
-		
+
 		if(SnakeArraySize <= SnakeLength - 2){
 			SnakeArraySize = SnakeArraySize + 8;
 			int newlen = sizeof(int*) * (SnakeArraySize) + sizeof(int[2]) * (SnakeArraySize);
 			int **NewArray = realloc(snake, newlen);
 			if(NewArray){
 				SnakePTR = (int *)(NewArray + SnakeArraySize);
-		
+
 			for(int i = 0; i < SnakeArraySize; i++){
 				NewArray[i] = (SnakePTR + 2 * i);
 			}
 			snake = NewArray;
 		} else {exit(19);}
-		
-
-
 		//free(NewArray);
 		} 	
 		for (int i = SnakeLength - 2; i > 0; i--){
 			snake[i][0] = snake[i - 1][0];
 			snake[i][1] = snake[i - 1][1];
 	}
-		
-		for(int i = 3; i < SnakeLength; i++){
+		FoodEaten = 0;
+		moveSnake(CurrentDirection, snake);
+		for (int i=3;i < SnakeLength - 2; i++){
 			if(snake[i][0] == snake[0][0] && snake[i][1] == snake[0][1]){
 				exit(121);
 			}
 		}
-		FoodEaten = 0;
-		moveSnake(CurrentDirection, snake);
 		mvprintw(--my, --mx, "m");	
 		mvprintw(food[0], food[1], "%c", ACS_PI);
 		refresh(); 
