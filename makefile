@@ -1,4 +1,3 @@
-# change application name here (executable output name)
 TARGET=ekanc
 
 # compiler
@@ -14,7 +13,7 @@ AR=$(CROSS)ar
 
 PTHREAD=-pthread
 
-CCFLAGS=$(DEBUG) $(OPT) $(WARN) $(PTHREAD) -pipe -fno-exceptions -ffunction-sections -fdata-sections -flto
+CCFLAGS=$(DEBUG) $(OPT) $(WARN) $(PTHREAD) 
 
 GTKLIB=`$(CROSS)pkg-config --cflags --libs gtk+-3.0` 
 
@@ -26,9 +25,9 @@ OBJS=	ekan.o
 
 all: $(OBJS)
 	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS)
-    
+
 ekan.o: ekan.c
 	$(CC) -c $(CCFLAGS) ekan.c $(GTKLIB) -o ekan.o
-    
+
 clean:
-	rm -f *.o $(TARGET)
+	rm -f *.o $(TARGET) 
