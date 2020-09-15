@@ -59,8 +59,6 @@ int main(){
         if((sneky == food[0] && snekx == food[1]) || !food[0]){
         //yey, food eaten
             generateFood(food, my, mx);
-            food[1] = 10;
-            food[0] = 10;
             FoodEaten = 1;
             SnakeLength++;
         }
