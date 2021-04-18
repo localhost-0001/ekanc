@@ -15,7 +15,7 @@ PTHREAD=-pthread
 
 CCFLAGS=$(DEBUG) $(OPT) $(WARN) $(PTHREAD) 
 
-GTKLIB=`$(CROSS)pkg-config --cflags --libs gtk+-3.0` 
+GTKLIB=`$(CROSS)pkg-config --cflags ` 
 
 # linker
 LD=$(CROSS)gcc
